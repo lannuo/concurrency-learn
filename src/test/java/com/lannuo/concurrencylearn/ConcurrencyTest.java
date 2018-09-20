@@ -1,20 +1,21 @@
 package com.lannuo.concurrencylearn;
 
-import com.lannuo.concurrencylearn.annotation.NotThreadSafe;
+import com.lannuo.concurrencylearn.annotation.ThreadSafe;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
-@NotThreadSafe
+@ThreadSafe
 public class ConcurrencyTest {
     private static int clentTotal=5000;
     private static int theadTotal=200;
-    private static int count=0;
+    private static AtomicInteger count=new AtomicInteger(0);
 
     private static void add(){
-        count++;
+        count.incrementAndGet();
     }
 
     public static void main(String[] args) throws Exception{
@@ -35,6 +36,6 @@ public class ConcurrencyTest {
         }
         countDownLatch.await();
         executorService.shutdown();
-        System.out.println(count);
+        System.out.println(count.get());
     }
 }
